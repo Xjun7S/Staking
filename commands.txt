@@ -1,0 +1,35 @@
+# Deploying a Contract
+seid tx wasm store cw20_base.wasm --from sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k --chain-id sei --gas-prices 0.25usei --gas auto --gas-adjustment 1.3
+
+# Instialzing
+
+seid tx wasm instantiate 1 '{"name": "Auto Gen", "symbol": "AUTO", "decimals": 3, "initial_balances": [{"address": "sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k", "amount": "1000000"}], "mint": {"minter": "sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k", "cap": "1000000000"}}' --label "Auto Gen" --admin sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k --from sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k --chain-id sei --gas-prices 0.25usei --gas auto --gas-adjustment 1.3
+Contract Address:- sei14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sh9m79m
+
+# Deploying Staking Contract
+seid tx wasm store cw20_stake.wasm --from sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k --chain-id sei --gas-prices 0.25usei --gas auto --gas-adjustment 1.3
+
+seid tx wasm instantiate 2 '{"owner":"sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k", "token_address":"sei14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sh9m79m", "unstaking_duration":{ "time":1000 }}' --label "Auto Native Staking" --admin sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k --from sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k --chain-id sei --gas-prices 0.25usei --gas auto --gas-adjustment 1.3
+Contract Address:- sei1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqms7u8a
+
+
+# Execute the Staking in the contract
+
+seid tx wasm execute sei14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sh9m79m '{"send":{"contract":"sei1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqms7u8a","amount":"10000","msg":"eyJzdGFrZSI6e319Cg=="}}' --from sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k --chain-id sei --gas-prices 0.25usei --gas auto --gas-adjustment 1.3
+
+# Unstake the tokens
+
+seid tx wasm execute sei1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqms7u8a '{"unstake": {"amount": "100"}}' --from sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k --chain-id sei --gas-prices 0.25usei --gas auto --gas-adjustment 1.3
+
+
+# Query to check the staked value in the contract
+
+seid query wasm contract-state smart sei1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqms7u8a '{"staked_value": {"address": "sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k"}}'
+
+# Claim the tokens
+
+seid tx wasm execute sei1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqms7u8a '{"claim": {}}' --from sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k --chain-id sei --gas-prices 0.25usei --gas auto --gas-adjustment 1.3
+
+# Query to check the balance
+
+seid query wasm contract-state smart sei14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sh9m79m '{"balance": {"address": "sei126t3q689x6pwls79xvvs3tlxszfescnfz0402k"}}'
